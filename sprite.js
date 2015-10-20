@@ -29,8 +29,7 @@ function Sprite(img, x, y, width, height) {
  * @param  {number} y   y-position on canvas to draw from
  */
 Sprite.prototype.draw = function(ctx, x, y) {
-	ctx.drawImage(this.img, this.x, this.y, this.width, this.height,
-		x, y, this.width, this.height);
+	ctx.drawImage(this.img, this.x, this.y, this.width, this.height,x, y, this.width, this.height);
 };
 
 /**

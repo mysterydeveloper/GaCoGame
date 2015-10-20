@@ -56,12 +56,9 @@ var man = {
 			this.y = height - 280 + 5*Math.cos(frames/10);
 			this.rotation = 0;
 
-		} else { // game and score state //
-
 			this.velocity += this.gravity;
 			this.y += this.velocity;
 
-			// change to the score state when man touches the ground
 			if (this.y >= height ) {
 				this.y = height ;
 			}
@@ -77,14 +74,11 @@ var man = {
 	 *                                        drawing
 	 */
 	draw: function(ctx) {
-		// ctx.save() for when i rotate/transform the player it saves the default before i do so
-		ctx.save();		
+
 		var n = this.animation[this.frame];
 		// draws the man with center in origo
 		s_GaCoMan[n].draw(ctx, -s_GaCoMan[n].width/2, -s_GaCoMan[n].height/2);
-		
-		// When I rotate/transform the player ctx.restore it will restore the values before the transformation
-		ctx.restore();
+
 	}
 }
 
@@ -159,17 +153,19 @@ function main() {
 		alert("Your browser doesn't support HTML5, please update to latest version");
 	}
 	ctx = canvas.getContext("2d");
-
 	currentstate = states.Splash;
 	// append canvas to document
 	document.body.appendChild(canvas);
 
 	// initate graphics and okbtn
 	var img = new Image();
-	
-	run();
-	
-	
+	img.onload = function() {
+		initSprites(this);
+		ctx.fillStyle ="blue";
+		run();
+	}
+	img.src = "res/sheet.png";
+
 }
 
 /**
@@ -210,7 +206,7 @@ function update() {
 function render() {
 	// draw background color
 	ctx.fillRect(0, 0, width, height);
-	
+	man.draw();
 	var width2 = width/2; // center of canvas
 
 	if (currentstate === states.Splash) {
