@@ -206,7 +206,7 @@ function update() {
 function render() {
 	// draw background color
 	ctx.fillRect(0, 0, width, height);
-	man.draw();
+	man.draw(ctx);
 	var width2 = width/2; // center of canvas
 
 	if (currentstate === states.Splash) {

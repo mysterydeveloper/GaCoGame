@@ -22,7 +22,7 @@ function Sprite(img, x, y, width, height) {
 	this.height = height*2;
 };
 /**
- * Draw sprite ta canvas context
+ * Draw sprite to the canvas context
  * 
  * @param  {CanvasRenderingContext2D} ctx context used for drawing
  * @param  {number} x   x-position on canvas to draw from
