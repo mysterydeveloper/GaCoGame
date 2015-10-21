@@ -6,6 +6,7 @@ var height;
 var frames = 0;
 var score = 0;
 var best = localStorage.getItem("best") || 0;
+var fgpos;
 
 // State vars //
 var currentstate;
@@ -15,6 +16,11 @@ var states = {
 
 // Game objects //
 
+/**
+ * okbtn to be init in main
+ *
+ */
+var okbtn;
 /**
  * The MAN
  */
@@ -53,17 +59,37 @@ var man = {
 		// rotation to zero
 		if (currentstate === states.Splash) {
 
-			this.y = height - 280 + 5*Math.cos(frames/10);
+			this.y = height - 280 + 5*Math.cos(frames/10);//makes him float before games starts instead of falling
 			this.rotation = 0;
+
+		} else { // game and score state //
 
 			this.velocity += this.gravity;
 			this.y += this.velocity;
 
-			if (this.y >= height ) {
-				this.y = height ;
+			// change to the score state when man touches the ground
+			if (this.y >= height - s_forground.height-10) {
+				this.y = height - s_forground.height-10;
+
+				// sets velocity to jump speed for correct rotation
+				//this.velocity = this._jump;
+			}
+			if (this.y <=0 + s_forground.height-10) {
+				this.y = 0 + s_forground.height-10;
+
+				// sets velocity to jump speed for correct rotation
+				//this.velocity = this._jump;
 			}
 
-			
+			// when man lack upward momentum increment the rotation
+			// angle
+			if (this.velocity >= this._jump) {
+				this.frame = 1;
+				this.rotation = Math.min(Math.PI/2, this.rotation + 0.3);
+
+			} else {
+				this.rotation = -0.3;
+			}
 		}
 	},
 
@@ -74,11 +100,14 @@ var man = {
 	 *                                        drawing
 	 */
 	draw: function(ctx) {
-
+		ctx.save();
+		// translate and rotate ctx coordinatesystem
+		ctx.translate(this.x, this.y);
 		var n = this.animation[this.frame];
 		// draws the man with center in origo
 		s_GaCoMan[n].draw(ctx, -s_GaCoMan[n].width/2, -s_GaCoMan[n].height/2);
-
+		ctx.restore();
+		
 	}
 }
 
@@ -162,6 +191,12 @@ function main() {
 	img.onload = function() {
 		initSprites(this);
 		ctx.fillStyle ="blue";
+		okbtn = {
+			x: (width - s_buttons.Ok.width)/2,
+			y: height - 200,
+			width: s_buttons.Ok.width,
+			height: s_buttons.Ok.height
+		}
 		run();
 	}
 	img.src = "res/sheet.png";
@@ -187,7 +222,7 @@ function update() {
 	frames++;
 
 	if (currentstate == states.Score) {
-		
+		fgpos = (fgpos - 2) % 14;
 	} else {
 		// set best score to maximum score
 		best = Math.max(best, score);
@@ -204,15 +239,23 @@ function update() {
  * Draws man and assets to the canvas
  */
 function render() {
-	// draw background color
+	
 	ctx.fillRect(0, 0, width, height);
+	s_background.draw(ctx, 0, height - s_background.height);
+	s_background.draw(ctx, s_background.width, height - s_background.height);
+	
 	man.draw(ctx);
+
+	// draw forground sprites
+	s_forground.draw(ctx, fgpos, height - s_forground.height);
+	s_forground.draw(ctx, fgpos+s_forground.width, height - s_forground.height);
+	
 	var width2 = width/2; // center of canvas
 
 	if (currentstate === states.Splash) {
 		// draw splash text and sprite to canvas
 		
-
+		
 	}
 	if (currentstate === states.Score) {
 		// draw gameover text and score board

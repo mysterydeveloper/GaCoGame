@@ -3,6 +3,9 @@
 // Sprite vars //
 
 var s_GaCoMan;
+var s_buttons;
+var s_background;
+var s_forground;
 
 
 /**
@@ -38,11 +41,20 @@ Sprite.prototype.draw = function(ctx, x, y) {
  * @param  {Image} img spritesheet image
  */
 function initSprites(img) {
- s_GaCoMan = [
+ 	s_GaCoMan = [
 		new Sprite(img, 156, 115, 17, 12),
 		new Sprite(img, 156, 128, 17, 12),
 		new Sprite(img, 156, 141, 17, 12)
 	];
+	s_buttons = {
+		Score: new Sprite(img,  79, 191, 40, 14),
+		Ok:    new Sprite(img, 119, 191, 40, 14),
+		Start: new Sprite(img, 159, 191, 40, 14)
+	}
+	s_background = new Sprite(img,   0, 0, 138, 114);
+	s_background.color = "#70C5CF"; // save background color
+	s_forground = new Sprite(img, 138, 0, 112,  56);
+
 	
 	
 }
